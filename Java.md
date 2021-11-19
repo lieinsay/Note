@@ -787,17 +787,37 @@ System.out.println(Runtime.getRuntime().availableProcessors());
 > [线程状态](#线程状态观测——state )
 
 ```java
-    public enum State {
-        NEW,
-        RUNNABLE,
-        BLOCKED,
-        WAITING,
-        TIMED_WAITING,
-        TERMINATED;
-    }
+public enum State {/
+    // 新建
+    NEW,
+	// 运行
+    RUNNABLE,
+	// 阻塞
+    BLOCKED,
+	// 等待
+    WAITING,
+	// 超市等待
+    TIMED_WAITING,
+	// 终止
+    TERMINATED;
+}
 ```
 
+> wait/sleep区别
 
+- 来自不同的类
+
+  - wait是java.lang.Object的
+
+  - sleep是java.lang.Thread的
+
+- 关于锁的释放
+
+  - wait会释放锁
+
+  - sleep不会释放锁
+
+- 
 
 # Java EE
 
