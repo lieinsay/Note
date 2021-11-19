@@ -816,7 +816,8 @@ public enum State {/
   - sleep不会释放锁
   
 - **使用的范围是不同的**
-
+  - 
+  - 
 # Java EE
 
 java企业版web规范
