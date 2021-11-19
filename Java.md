@@ -805,19 +805,17 @@ public enum State {/
 
 > wait/sleep区别
 
-- 来自不同的类
-
+- **来自不同的类**
   - wait是java.lang.Object的
-
+  
   - sleep是java.lang.Thread的
-
-- 关于锁的释放
-
+  
+- **关于锁的释放**
   - wait会释放锁
-
+  
   - sleep不会释放锁
-
-- 
+  
+- **使用的范围是不同的**
 
 # Java EE
 
