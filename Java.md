@@ -787,7 +787,7 @@ System.out.println(Runtime.getRuntime().availableProcessors());
 > [线程状态](#线程状态观测——state )
 
 ```java
-public enum State {/
+public enum State {
     // 新建
     NEW,
 	// 运行
