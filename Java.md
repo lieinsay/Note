@@ -6,9 +6,7 @@
 
 # java集合
 
-![image-20161110170122894](image/image-20161110170122894.png)
-
-![image-20161110170149931](image/image-20161110170149931.png)
+![java.util](C:/Users/lenovo/Desktop/java.util.svg)
 
 ![image-2020031351363](image/image-2020031351363.jpg)
 
@@ -1205,4 +1203,92 @@ public class SemaphoreTest {
 ```
 
 ## 8、读写锁
+
+```java
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+/*
+* ReadWriteLock
+* 读-读   可以共存
+* 读-写   不能共存
+* 写-写   不能共存
+* 独占锁（写锁）
+* 共享锁（读锁）
+* */
+public class ReadWriteLockDemo {
+    public static void main(String[] args) {
+        MyCacheLock myCache = new MyCacheLock();
+        for (int i = 1; i <= 5; i++) {
+            final int finalI = i;
+            new Thread(() -> {
+                myCache.put(String.valueOf(finalI), String.valueOf(finalI));
+            }, String.valueOf(i)).start();
+        }
+        for (int i = 1; i <= 5; i++) {
+            final int finalI = i;
+            new Thread(() -> {
+                myCache.get(String.valueOf(finalI));
+            }, String.valueOf(i)).start();
+        }
+    }
+}
+// 加锁
+class MyCacheLock {
+    private volatile Map<String, Object> map = new HashMap<>();
+    private ReadWriteLock lock = new ReentrantReadWriteLock();
+    // 存，写，只希望同时只有一个线程写
+    public void put(String key, Object value) {
+        try {
+            lock.writeLock().lock();
+            System.out.println(Thread.currentThread().getName() + "写入" + key);
+            map.put(key, value);
+            System.out.println(Thread.currentThread().getName() + "写入ok");
+        } catch (Exception e) {
+
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+    // 取，读，所有人都可以读
+    public void get(String key) {
+        try {
+            lock.readLock().lock();
+            System.out.println(Thread.currentThread().getName() + "读取" + key);
+            map.get(key);
+            System.out.println(Thread.currentThread().getName() + "读取ok");
+        } catch (Exception e) {
+
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+}
+// 未加锁
+class MyCache {
+    private volatile Map<String, Object> map = new HashMap<>();
+    // 存，写
+    public void put(String key, Object value) {
+        System.out.println(Thread.currentThread().getName() + "写入" + key);
+        map.put(key, value);
+        System.out.println(Thread.currentThread().getName() + "写入ok");
+
+    }
+    // 取，读
+    public void get(String key) {
+        System.out.println(Thread.currentThread().getName() + "读取" + key);
+        map.get(key);
+        System.out.println(Thread.currentThread().getName() + "读取ok");
+    }
+}
+```
+
+## 9、阻塞队列
+
+- [*BlockingDeque*](https://www.matools.com/file/manual/jdk_api_1.8_google/java/util/concurrent/BlockingDeque.html)
+
+- [*BlockingQueue*](https://www.matools.com/file/manual/jdk_api_1.8_google/java/util/concurrent/BlockingQueue.html)
+
+
 
