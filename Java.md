@@ -6,7 +6,7 @@
 
 # java集合
 
-![java.util](C:/Users/lenovo/Desktop/java.util.svg)
+![java.util](image/java.util.svg)
 
 ![image-2020031351363](image/image-2020031351363.jpg)
 
