@@ -4,6 +4,43 @@
 
 # java基础API
 
+## 注解
+
+### 注解基本知识
+
+==所有的注解类型都继承自***Annotation***这个普通的接口==
+
+- 元注解：**@Retention** **@Target** **@Document** **@Inherited**
+- Annotation型定义为**@interface**, 所有的Annotation会自动继承java.lang.Annotation这一接口,并且不能再去继承别的类或是接口。
+- 参数成员只能用**public**或默认(**default**)这两个访问权修饰
+- 参数成员只能用基本类型**byte，short，char，int，long，float，double，boolean**八种基本数据类型和**String**、**Enum**、**Class**、**annotations**等数据类型，以及这一些类型的**数组。**
+- 要获取类、方法和字段的注解信息，必须通过Java的反射技术来获取 Annotation对象,除此之外没有别的获取注解对象的方法
+- 注解也可以没有定义成员, 不过这样注解就没啥用了，只起到标识作用
+
+自定义注解类时, 可以指定目标 (类、方法、字段, 构造函数等) , 注解的生命周期(运行时,class文件或者源码中有效), 是否将注解包含在javadoc中及是否允许子类继承父类中的注解, 具体如下：
+
+- @Target 表示该注解目标,可能的 ElemenetType 参数包括：
+
+**CONSTRUCTOR** 构造器声明
+**FIELD** 域声明(包括 enum 实例)
+**LOCAL_VARIABLE** 局部变量声明
+**METHOD** 方法声明
+**PACKAGE** 包声明
+**PARAMETER** 参数声明
+**TYPE** 类，接口(包括注解类型)或enum声明
+
+- @Retention 表示该注解的生命周期,可选的 RetentionPolicy 参数包括
+
+**SOURCE** 注解将被编译器丢弃
+**CLASS** 注解在class文件中可用，但会被JVM丢弃
+**RUNTIME** JVM将在运行期也保留注释，因此可以通过反射机制读取注解的信息
+
+- @Documented 指示将此注解包含在 javadoc 中
+
+- @Inherited 指示允许子类继承父类中的注解
+
+> 注解一般与反射结合使用：[反射](#反射)
+
 # java集合
 
 ![java.util](image/java.util.svg)
@@ -14,11 +51,135 @@
 
 # JVM
 
+
+
 [JAVA 常见内存泄露例子及详解](https://blog.csdn.net/m0_38110132/article/details/81986334)
 
-# 注解和反射
+# 反射
+
+![img](image/v2-eddc430b991c58039dfc79dd6f3139cc_1440w.jpg)
+
+## 反射机制的相关类
+
+与Java反射相关的类如下：
+
+| 类名          | 用途                                             |
+| ------------- | ------------------------------------------------ |
+| Class类       | 代表类的实体，在运行的Java应用程序中表示类和接口 |
+| Field类       | 代表类的成员变量（成员变量也称为类的属性）       |
+| Method类      | 代表类的方法                                     |
+| Constructor类 | 代表类的构造方法                                 |
+
+### Class类
+
+[Class](https://developer.android.google.cn/reference/java/lang/Class)代表类的实体，在运行的Java应用程序中表示类和接口。在这个类中提供了很多有用的方法，这里对他们简单的分类介绍。
+
+- **获得类相关的方法**
+
+| 方法                       | 用途                                                   |
+| -------------------------- | ------------------------------------------------------ |
+| asSubclass(Class<U> clazz) | 把传递的类的对象转换成代表其子类的对象                 |
+| Cast                       | 把对象转换成代表类或是接口的对象                       |
+| getClassLoader()           | 获得类的加载器                                         |
+| getClasses()               | 返回一个数组，数组中包含该类中所有公共类和接口类的对象 |
+| getDeclaredClasses()       | 返回一个数组，数组中包含该类中所有类和接口类的对象     |
+| forName(String className)  | 根据类名返回类的对象                                   |
+| getName()                  | 获得类的完整路径名字                                   |
+| newInstance()              | 创建类的实例                                           |
+| getPackage()               | 获得类的包                                             |
+| getSimpleName()            | 获得类的名字                                           |
+| getSuperclass()            | 获得当前类继承的父类的名字                             |
+| getInterfaces()            | 获得当前类实现的类或是接口                             |
+
+- **获得类中属性相关的方法**
+
+| 方法                          | 用途                   |
+| ----------------------------- | ---------------------- |
+| getField(String name)         | 获得某个公有的属性对象 |
+| getFields()                   | 获得所有公有的属性对象 |
+| getDeclaredField(String name) | 获得某个属性对象       |
+| getDeclaredFields()           | 获得所有属性对象       |
+
+- **获得类中注解相关的方法**
+
+| 方法                                            | 用途                                   |
+| ----------------------------------------------- | -------------------------------------- |
+| getAnnotation(Class<A> annotationClass)         | 返回该类中与参数类型匹配的公有注解对象 |
+| getAnnotations()                                | 返回该类所有的公有注解对象             |
+| getDeclaredAnnotation(Class<A> annotationClass) | 返回该类中与参数类型匹配的所有注解对象 |
+| getDeclaredAnnotations()                        | 返回该类所有的注解对象                 |
+
+- **获得类中构造器相关的方法**
+
+| 方法                                               | 用途                                   |
+| -------------------------------------------------- | -------------------------------------- |
+| getConstructor(Class...<?> parameterTypes)         | 获得该类中与参数类型匹配的公有构造方法 |
+| getConstructors()                                  | 获得该类的所有公有构造方法             |
+| getDeclaredConstructor(Class...<?> parameterTypes) | 获得该类中与参数类型匹配的构造方法     |
+| getDeclaredConstructors()                          | 获得该类所有构造方法                   |
+
+- **获得类中方法相关的方法**
+
+| 方法                                                       | 用途                   |
+| ---------------------------------------------------------- | ---------------------- |
+| getMethod(String name, Class...<?> parameterTypes)         | 获得该类某个公有的方法 |
+| getMethods()                                               | 获得该类所有公有的方法 |
+| getDeclaredMethod(String name, Class...<?> parameterTypes) | 获得该类某个方法       |
+| getDeclaredMethods()                                       | 获得该类所有方法       |
+
+- **类中其他重要的方法**
+
+| 方法                                                         | 用途                             |
+| ------------------------------------------------------------ | -------------------------------- |
+| isAnnotation()                                               | 如果是注解类型则返回true         |
+| isAnnotationPresent(Class<? extends Annotation> annotationClass) | 如果是指定类型注解类型则返回true |
+| isAnonymousClass()                                           | 如果是匿名类则返回true           |
+| isArray()                                                    | 如果是一个数组类则返回true       |
+| isEnum()                                                     | 如果是枚举类则返回true           |
+| isInstance(Object obj)                                       | 如果obj是该类的实例则返回true    |
+| isInterface()                                                | 如果是接口类则返回true           |
+| isLocalClass()                                               | 如果是局部类则返回true           |
+| isMemberClass()                                              | 如果是内部类则返回true           |
+
+### Field类
+
+Field代表类的成员变量（成员变量也称为类的属性）。
+
+| 方法                          | 用途                    |
+| ----------------------------- | ----------------------- |
+| equals(Object obj)            | 属性与obj相等则返回true |
+| get(Object obj)               | 获得obj中对应的属性值   |
+| set(Object obj, Object value) | 设置obj中对应属性值     |
+
+### Method类
+
+Method代表类的方法。
+
+| 方法                               | 用途                                     |
+| ---------------------------------- | ---------------------------------------- |
+| invoke(Object obj, Object... args) | 传递object对象及参数调用该对象对应的方法 |
+
+### Constructor类
+
+Constructor代表类的构造方法。
+
+| 方法                            | 用途                       |
+| ------------------------------- | -------------------------- |
+| newInstance(Object... initargs) | 根据传递的参数创建类的对象 |
+
+### Annotation接口
+
+通过自定义或者有的注解来指向get到的Annotation，以此获取注解的属性
+
+![image-20211204154002981](image/image-20211204154002981.png)
 
 
+
+
+
+> [GitHub注解和反射相关代码](https://github.com/lieinsay/java/tree/main/AnnotationAndReflexStudy)
+>
+> [java.lang.reflect帮助文档](https://www.matools.com/file/manual/jdk_api_1.8_google/java/lang/reflect/package-frame.html)
 
 # 多线程
 
@@ -1898,8 +2059,79 @@ public static void main(String[] args) {
 ## 4、锁
 
 - 公平锁、非公平锁
+
+公平锁：不能够插队，必须先来后到
+
+非公平锁：可以插队（默认都是非公平锁）
+
 - 可重入锁
+
+递归锁：允许重复调用加锁的方法或者代码块
+
+同样的锁被加上时，相当于入栈，解锁的时候先解开栈顶的锁
+
 - 自旋锁
-- 读写锁
+
+自旋锁（spinlock）：是指当一个线程在获取锁的时候，如果锁已经被其它线程获取，那么该线程将循环等待，然后不断的判断锁是否能够被成功获取，直到获取到锁才会退出循环。
+
+获取锁的线程一直处于活跃状态，但是并没有执行任何有效的任务，使用这种锁会造成busy-waiting。
+
+它是为实现保护共享资源而提出一种锁机制。其实，自旋锁与互斥锁比较类似，它们都是为了解决对某项资源的互斥使用。无论是互斥锁，还是自旋锁，在任何时刻，最多只能有一个保持者，也就说，在任何时刻最多只能有一个执行单元获得锁。但是两者在调度机制上略有不同。对于互斥锁，如果资源已经被占用，资源申请者只能进入睡眠状态。但是自旋锁不会引起调用者睡眠，如果自旋锁已经被别的执行单元保持，调用者就一直循环在那里看是否该自旋锁的保持者已经释放了锁，”自旋”一词就是因此而得名。
+
+```java
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+
+public class SpinlockDemo {
+    AtomicReference<Thread> atomicReference = new AtomicReference<>();
+    // 加锁
+    public void myLock(){
+        Thread thread = Thread.currentThread();
+        while (!atomicReference.compareAndSet(null,thread)){
+        }
+        System.out.println(Thread.currentThread().getName() + "==>myLock");
+    }
+    // 解锁
+    public  void myUnLock(){
+        Thread thread = Thread.currentThread();
+        System.out.println(Thread.currentThread().getName() + "==>myUnLock");
+        atomicReference.compareAndSet(thread,null);
+    }
+    public static void main(String[] args) {
+        SpinlockDemo lock = new SpinlockDemo();
+        new Thread(()->{
+            lock.myLock();
+            try {
+                System.out.println("A");
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                lock.myUnLock();
+            }
+        },"A").start();
+        new Thread(()->{
+            lock.myLock();
+            try {
+                System.out.println("B");
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                lock.myUnLock();
+            }
+        },"B").start();
+    }
+}
+```
+
+- [读写锁](#8、读写锁)
+
 - 死锁
+
+**解决方案**
+
+1. 使用控制台代码`jps -1`定位进程号
+2. 使用控制台代码`jstack 进程号`查看堆栈信息
+3. 通过日志
+
+> [Java中的锁](https://blog.csdn.net/u013256816/article/details/51204385)
 
