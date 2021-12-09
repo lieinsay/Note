@@ -72,7 +72,7 @@
 
 ### Class类
 
-[Class](https://developer.android.google.cn/reference/java/lang/Class)代表类的实体，在运行的Java应用程序中表示类和接口。在这个类中提供了很多有用的方法，这里对他们简单的分类介绍。
+Class代表类的实体，在运行的Java应用程序中表示类和接口。在这个类中提供了很多有用的方法，这里对他们简单的分类介绍。
 
 - **获得类相关的方法**
 
@@ -172,10 +172,6 @@ Constructor代表类的构造方法。
 通过自定义或者有的注解来指向get到的Annotation，以此获取注解的属性
 
 ![image-20211204154002981](image/image-20211204154002981.png)
-
-
-
-
 
 > [GitHub注解和反射相关代码](https://github.com/lieinsay/java/tree/main/AnnotationAndReflexStudy)
 >
